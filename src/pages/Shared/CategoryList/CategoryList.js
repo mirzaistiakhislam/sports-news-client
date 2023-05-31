@@ -20,7 +20,7 @@ const CategoryList = () => {
                 {
                     categories.map(category => <ListGroup key={category.id}>
                         <ListGroupItem action variant="dark">
-                            <Link>{category.name}</Link>
+                            <Link to={`/news-category/${category.id}`}>{category.name}</Link>
                         </ListGroupItem>
                     </ListGroup>)
                 }
