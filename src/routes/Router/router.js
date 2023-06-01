@@ -3,6 +3,7 @@ import Main from "../../layout/Main";
 import Home from "../../pages/Home/Home";
 import About from "../../pages/About/About";
 import NewsCategory from "../../pages/NewsCategory/NewsCategory";
+import NewsDetails from "../../pages/Shared/NewsDetails/NewsDetails";
 
 export const router = createBrowserRouter([
     {
@@ -25,6 +26,13 @@ export const router = createBrowserRouter([
                 element: <NewsCategory></NewsCategory>,
                 loader: ({ params }) => {
                     return fetch(`http://localhost:5000/news-category/${params.id}`)
+                }
+            },
+            {
+                path: '/news/:id',
+                element: <NewsDetails></NewsDetails>,
+                loader: ({ params }) => {
+                    return fetch(`http://localhost:5000/news/${params.id}`)
                 }
             }
         ]

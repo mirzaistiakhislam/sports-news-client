@@ -1,18 +1,19 @@
 import React from 'react';
-import { FaShareAlt, FaRegBookmark } from "react-icons/fa";
+import { useLoaderData } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { FaRegBookmark, FaShareAlt } from 'react-icons/fa';
 
-const NewsSummaryCard = ({ news }) => {
+const NewsDetails = () => {
 
-    const { _id, author, details, image_url, title } = news;
+    const newsDetails = useLoaderData();
+    const { author, title, details, image_url } = newsDetails;
 
     return (
         <div>
             <Card>
-                <Card>
+                <Card.Header className="text-muted">
                     <div className='px-3 py-2 d-flex justify-content-between border-2px solid'>
                         <div className='d-flex flex-row align-items-center'>
                             <div>
@@ -34,20 +35,15 @@ const NewsSummaryCard = ({ news }) => {
                             <FaRegBookmark></FaRegBookmark>
                         </div>
                     </div>
-                </Card>
+                </Card.Header>
                 <Card.Body>
-                    <Card.Title className='text-center'>{title}</Card.Title>
+                    <Card.Title className="text-center">{title}</Card.Title>
                     <Image src={image_url} className='w-100 mb-2' />
-                    {
-                        details.length > 250 ?
-                            <p>{details.slice(0, 250)}... <Link to={`/news/${_id}`}>read more</Link></p>
-                            :
-                            <p>{details}</p>
-                    }
+                    <Card.Text>{details}</Card.Text>
                 </Card.Body>
             </Card>
         </div>
     );
 };
 
-export default NewsSummaryCard;
+export default NewsDetails;
