@@ -89,7 +89,7 @@ const Registration = () => {
 
                 <Form.Group className="mb-3" controlId="formBasicPhotoURL">
                     <Form.Label>PhotoURL</Form.Label>
-                    <Form.Control type="text" name='photoURL' placeholder="PhotoURL" required />
+                    <Form.Control type="text" name='photoURL' placeholder="PhotoURL" />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">

@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
+import { FaUserCircle } from 'react-icons/fa';
 
 const Header = () => {
 
@@ -29,7 +30,29 @@ const Header = () => {
                         <Nav>
                             {
                                 user?.uid ?
-                                    <Link onClick={handleLogout}>Logout</Link>
+                                    <div className='d-flex flex-row align-items-center'>
+                                        <div>
+                                            <Link to="/profile">
+                                                {
+                                                    user.photoURL === null ?
+                                                        <FaUserCircle size={25} color="white"></FaUserCircle>
+                                                        :
+                                                        <img
+                                                            className='rounded-circle my-auto d-block'
+                                                            width={35}
+                                                            height={35}
+                                                            src={user.photoURL}
+                                                            alt='Profile Pic'
+                                                        />
+
+                                                }
+                                            </Link>
+
+                                        </div>
+                                        <div className='ms-2'>
+                                            <Link onClick={handleLogout}>Logout</Link>
+                                        </div>
+                                    </div>
                                     :
                                     <>
                                         <Link to="/login">Login</Link>

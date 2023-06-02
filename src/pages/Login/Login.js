@@ -2,14 +2,15 @@ import React, { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
 const Login = () => {
 
-    const { logIn, setLoading } = useContext(AuthContext);
+    const { logIn, setLoading, forgetPassword } = useContext(AuthContext);
 
     const [error, setError] = useState('');
+    const [storeEmail, setStoreEmail] = useState('');
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -30,7 +31,7 @@ const Login = () => {
                 form.reset();
                 setError('');
 
-                if (user?.emailVerified) {
+                if (user.emailVerified) {
                     navigate(from, { replace: true });
                     toast.success('Successfully logged in');
                 }
@@ -47,6 +48,19 @@ const Login = () => {
             })
     }
 
+    const handleEmail = (event) => {
+        const setEmail = event.target.value;
+        setStoreEmail(setEmail);
+    }
+
+    const handleForgetPassword = () => {
+        forgetPassword(storeEmail)
+            .then(() => {
+                toast.success("password reset email sent.")
+            })
+            .catch(error => console.error(error))
+    }
+
 
     return (
         <div>
@@ -54,7 +68,7 @@ const Login = () => {
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" name='email' placeholder="Enter email" required />
+                    <Form.Control onBlur={handleEmail} type="email" name='email' placeholder="Enter email" required />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -63,6 +77,7 @@ const Login = () => {
                 </Form.Group>
 
                 <p className='text-danger'>{error}</p>
+                <p onClick={handleForgetPassword}><Link className='text-decoration-none'>Forget Password?</Link></p>
 
                 <Button variant="primary" type="submit">
                     Login
