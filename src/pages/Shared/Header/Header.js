@@ -8,7 +8,6 @@ import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 const Header = () => {
 
     const { user, logOut } = useContext(AuthContext);
-    console.log(user);
 
     const handleLogout = () => {
         logOut()
@@ -30,7 +29,7 @@ const Header = () => {
                         <Nav>
                             {
                                 user?.uid ?
-                                    <Link onClick={handleLogout} to="/">Logout</Link>
+                                    <Link onClick={handleLogout}>Logout</Link>
                                     :
                                     <>
                                         <Link to="/login">Login</Link>

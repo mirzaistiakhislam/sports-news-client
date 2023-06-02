@@ -3,12 +3,14 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const Login = () => {
 
-    const { logIn } = useContext(AuthContext);
+    const { logIn, setLoading } = useContext(AuthContext);
 
     const [error, setError] = useState('');
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -24,11 +26,24 @@ const Login = () => {
         logIn(email, password)
             .then(result => {
                 const user = result.user;
-                navigate(from, { replace: true });
+
+                form.reset();
+                setError('');
+
+                if (user?.emailVerified) {
+                    navigate(from, { replace: true });
+                    toast.success('Successfully logged in');
+                }
+                else {
+                    toast.error('Please verify your email first');
+                }
             })
             .catch(error => {
                 console.error(error);
-                // setError(error);
+                setError(error.message);
+            })
+            .finally(() => {
+                setLoading(false);
             })
     }
 
@@ -47,7 +62,7 @@ const Login = () => {
                     <Form.Control type="password" name='password' placeholder="Password" required />
                 </Form.Group>
 
-                {/* <p>{error}</p> */}
+                <p className='text-danger'>{error}</p>
 
                 <Button variant="primary" type="submit">
                     Login

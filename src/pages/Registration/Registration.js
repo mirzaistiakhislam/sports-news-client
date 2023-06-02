@@ -1,11 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
+import { toast } from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 const Registration = () => {
 
-    const { createUser, googleLogin, updateUser } = useContext(AuthContext);
+    const { createUser, googleLogin, updateUser, verifyEmail } = useContext(AuthContext);
+
+    // const [success, setSuccess] = useState(false);
+    const [error, setError] = useState('');
+    const [accepted, setAccepted] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -19,10 +25,19 @@ const Registration = () => {
         createUser(email, password)
             .then(result => {
                 const user = result.user;
+
+                setError('');
                 form.reset();
                 handleUpdateProfile(name, photoURL);
+                emailVerification();
+                toast('Good Job! Now please verify your email', {
+                    icon: '👏',
+                });
             })
-            .catch(error => console.error(error))
+            .catch(error => {
+                console.error(error);
+                setError(error.message);
+            })
     }
 
     const handleUpdateProfile = (name, photoURL) => {
@@ -41,6 +56,16 @@ const Registration = () => {
                 const user = result.user;
             })
             .catch(error => console.error(error))
+    }
+
+    const emailVerification = () => {
+        verifyEmail()
+            .then(() => { })
+            .catch(error => console.error(error))
+    }
+
+    const handleTermsAndConditions = (event) => {
+        setAccepted(event.target.checked);
     }
 
     return (
@@ -68,9 +93,15 @@ const Registration = () => {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Check me out" />
+                    <Form.Check
+                        onClick={handleTermsAndConditions}
+                        type="checkbox"
+                        label={<>Accept <Link to="/termsandconditions">Terms and Conditions</Link></>} />
                 </Form.Group>
-                <Button variant="primary" type="submit" className='w-100 mb-2'>
+
+                <p className='text-danger'>{error}</p>
+
+                <Button variant="primary" type="submit" className='w-100 mb-2' disabled={!accepted}>
                     Register
                 </Button> <br />
 
